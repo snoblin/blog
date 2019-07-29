@@ -1,0 +1,31 @@
+server:
+  port: 8090
+spring:
+  freemarker:
+    template-loader-path: classpath:/templates/,classpath:/templates/admin/
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  mvc:
+      view:
+        suffix: .ftl
+  datasource:
+      url: jdbc:mysql://localhost:3306/myblog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: root
+      password: bolin123.
+      driver-class-name: com.mysql.cj.jdbc.Driver
+# log配置
+logging:
+  level:
+    tk.snolin.blog: DEBUG
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: tk.snolin.blog.entity
+  #pagehelper配置
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: mysql

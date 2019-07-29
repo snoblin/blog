@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="tk.snolin.blog.mapper.AdminMapper">
+    <resultMap id="blogMainMap" type="tk.snolin.blog.entity.BlogMain">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="text" column="text"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="tagMap" type="tk.snolin.blog.entity.Tag">
+        <id property="id" column="id"/>
+        <result property="tag" column="tag"/>
+    </resultMap>
+    <resultMap id="blogMainTagListMap" type="tk.snolin.blog.entity.BlogMain" extends="blogMainMap">
+        <collection property="tagList" columnPrefix="tag_" ofType="tk.snolin.blog.entity.Tag" resultMap="tagMap"/>
+    </resultMap>
+
+    <select id="getAllBlog" resultMap="blogMainTagListMap">
+        select
+            b.id,
+            b.title,
+            b.text,
+            b.create_time,
+            t.id tag_id,
+            t.tag tag_tag
+        from blog b
+        inner join blog_tag bt on  b.id=bt.blog_id
+        inner join tag t on t.id = bt.tag_id
+    </select>
+
+    
+
+</mapper>

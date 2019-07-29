@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="tk.snolin.blog.mapper.BaseMapper">
+    <resultMap id="blogMainMap" type="tk.snolin.blog.entity.BlogMain">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="text" column="text"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="tagMap" type="tk.snolin.blog.entity.Tag">
+        <id property="id" column="id"/>
+        <result property="tag" column="tag"/>
+    </resultMap>
+    <resultMap id="blogMainAndTagMap" type="tk.snolin.blog.entity.BlogMain" extends="blogMainMap">
+        <collection property="tagList" resultMap="tagMap"  ofType="tk.snolin.blog.entity.Tag" columnPrefix="tag_"/>
+    </resultMap>
+
+    <select id="selectAllBlogMain" resultMap="blogMainMap">
+        select * from blog
+    </select>
+
+    <select id="selectTagByBlogId" resultMap="tagMap">
+        select t.id ,t.tag
+        from tag as t , blog_tag as bt
+        where bt.blog_id = #{blogId} and bt.tag_id = t.id
+    </select>
+
+    <select id="selectBlogById" resultMap="blogMainAndTagMap">
+        select
+               b.id id,
+               b.title title,
+               b.text text,
+               b.create_time createTime,
+               t.id tag_id,
+               t.tag tag_tag
+        from blog  b
+        inner join blog_tag bt on b.id = bt.blog_id
+        inner join tag t on t.id = bt.tag_id
+        where b.id = #{blogId}
+    </select>
+</mapper>
